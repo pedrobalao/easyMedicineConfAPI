@@ -20,8 +20,11 @@ const Route = use('Route')
 //Route.on('/').render('welcome')
 Route.post('/auth/register', 'AuthController.register')
 Route.post('/auth/login', 'AuthController.login')
-Route.get('/auth/user', 'AuthController.user')
-Route.post('/auth/logout', 'AuthController.logout')
+Route.get('/auth/user', 'AuthController.user').middleware('auth')
+Route.post('/auth/logout', 'AuthController.logout').middleware('auth')
 
 Route.resource('diseases', 'DiseaseController').middleware('auth')
+Route.resource('vias', 'ViaController').middleware('auth')
+Route.resource('diseases.treatments', 'TreatmentController').middleware('auth')
+Route.resource('treatments', 'TreatmentController').middleware('auth')
 

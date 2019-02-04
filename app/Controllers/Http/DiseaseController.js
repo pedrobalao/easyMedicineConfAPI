@@ -54,7 +54,7 @@ class DiseaseController {
 
     response.json({
       message: 'Successufully created a new '+resourceName,
-      data: result
+      disease: result
     })
   }
 
@@ -69,11 +69,10 @@ class DiseaseController {
    */
   async show ({ params, request, response, view }) {
     let id = request.params.id
-    let result = await Disease.find(id)
+    let disease = await Disease.find(id)
 
     response.json({
-      message: 'Success',
-      data: result
+      disease
     })
   }
 
