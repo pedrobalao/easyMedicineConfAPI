@@ -27,7 +27,8 @@ class TreatmentController {
     console.log(disease_id)
 
     const disease = await Disease.find(disease_id)
-    const treatments = await disease.treatments().fetch()
+    // const treatments = await disease.treatments().fetch()
+    const treatments = await Treatement.query().where('disease_id', disease_id).orderBy(['order']).fetch()
 
     response.json({treatments})
   }

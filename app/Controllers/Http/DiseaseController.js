@@ -6,7 +6,10 @@
 
 
 const Disease = use('App/Models/Disease')
+const Treatment = use('App/Models/Treatment')
+const Database = use('Database')
 const resourceName = 'Disease'
+
 
 /**
  * Resourceful controller for interacting with diseases
@@ -48,9 +51,45 @@ class DiseaseController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    const {description, author, indication, followup, example, bibliography, observation} = request.post()  
+    const {description, author, indication, followup, example, bibliography, observation, treatments} = request.post()  
     debugger
-    const result = await Disease.create({description, author, indication, followup, example, bibliography, observation})
+    console.log(treatments)
+    const trx = await Database.beginTransaction()
+    const result = await Disease.create({description, author, indication, followup, example, bibliography, observation}, trx)
+    if(treatments != null && treatments.length > 0){
+      treatments.forEach( (element, index) => {
+        element.disease_id = result.id
+        element.order = index
+      })
+      console.log(treatments)
+      await Treatment.createMany(treatments, trx)
+    }
+    trx.commit()
+
+
+    // if(treatments != null){
+
+    //   await Promise.all(
+    //     treatments.map(treat => {
+    //       if (!treat.id) {
+    //         return Treatment.create(treat)
+    //       }
+    //       return Treatment.query()
+    //         .where('id', treat.id)
+    //         .first()
+    //         .then(existingTreatment => {
+    //           delete treat.id
+    //           if (existingTreatment) {
+    //             existingTreatment.merge(treat)
+    //             return existingTreatment.save()
+    //           } else {
+    //             return Treatment.create(treat)
+    //           }
+    //         })
+    //     })
+    //   )
+    //   await result.treatments().saveMany(treatments)
+      
 
     response.json({
       message: 'Successufully created a new '+resourceName,
@@ -86,13 +125,28 @@ class DiseaseController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
-    const {description, author, indication, followup, example, bibliography, observation} = request.post()  
-    
+    const {description, author, indication, followup, example, bibliography, observation, treatments} = request.post()  
     let id = request.params.id
-    var affectedRows = await Disease.query().where('id', id).update({ description, author, indication, followup, example, bibliography, observation})
+
+    const trx = await Database.beginTransaction()
+    let affectedRows = await Disease.query().where('id', id).update({ description, author, indication, followup, example, bibliography, observation}, trx)
+
+    // delete all treatments and insert the new list
+    
+    await Treatment.query().where('disease_id', id).delete(trx)
+
+    if(treatments != null && treatments.length > 0){
+      treatments.forEach((element, index) => {
+        element.id = null
+        element.disease_id = id
+        element.order = index
+      })
+      await Treatment.createMany(treatments, trx)
+    }
+    trx.commit()
 
     response.json({
-      message: 'Successufully updated '+affectedRows+' rows'
+      message: 'Successufully updated '
     })
   }
 

@@ -4,16 +4,16 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-const Via = use('App/Models/Via')
-const resourceName = 'Via'
+const Drug = use('App/Models/Drug')
+const resourceName = 'Drug'
 
 /**
- * Resourceful controller for interacting with vias
+ * Resourceful controller for interacting with drugs
  */
-class ViaController {
+class DrugController {
   /**
-   * Show a list of all vias.
-   * GET vias
+   * Show a list of all drugs.
+   * GET drugs
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -21,36 +21,49 @@ class ViaController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-    
-    const vias = await Via.all()
+    const drugs = await Drug.all()
 
     response.json({
-      vias
+      drugs
     })
   }
 
   /**
-   * Create/save a new via.
-   * POST vias
+   * Search drugs by name.
+   * GET drugs/search?drugname=:string
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {View} ctx.view
+   */
+  async search ({ request, response }) {
+    
+    let searchstr = request.qs.drugname;
+    searchstr = '%'+searchstr.toUpperCase().replace(' ','%')+'%'
+    console.log(searchstr)
+    const drugs = await Drug.query().select('Id', 'Name').whereRaw('UPPER(Name) like ?', searchstr).fetch()
+
+    response.json({
+      drugs
+    })
+  }
+ 
+
+  /**
+   * Create/save a new drug.
+   * POST drugs
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    console.log('Create Via')
-    const {Id} = request.post()  
-    const result = await Via.create({Id})
-
-    response.json({
-      message: 'Successufully created a new '+resourceName,
-      via: result
-    })
   }
 
   /**
-   * Display a single via.
-   * GET vias/:id
+   * Display a single drug.
+   * GET drugs/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -59,42 +72,34 @@ class ViaController {
    */
   async show ({ params, request, response, view }) {
     let id = request.params.id
-    let via = await Via.find(id)
+    let drug = await Drug.find(id)
 
     response.json({
-      via
+      drug
     })
   }
 
-
   /**
-   * Update via details.
-   * PUT or PATCH vias/:id
+   * Update drug details.
+   * PUT or PATCH drugs/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  /* async update ({ params, request, response }) {
-   
-  } */
+  async update ({ params, request, response }) {
+  }
 
   /**
-   * Delete a via with id.
-   * DELETE vias/:id
+   * Delete a drug with id.
+   * DELETE drugs/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
-    let id = request.params.id
-    var affectedRows = await Via.query().where('id', id).del()
-
-    response.json({
-      message: 'Successufully deleted '+affectedRows+' rows'
-    })
   }
 }
 
-module.exports = ViaController
+module.exports = DrugController
