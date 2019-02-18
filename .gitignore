@@ -7,6 +7,8 @@ tmp
 
 # Environment variables, never commit this file
 .env
+.env_local
+.env_azure
 
 # The development sqlite file
 database/development.sqlite
