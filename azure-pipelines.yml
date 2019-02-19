@@ -10,8 +10,34 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  imageName: 'your-container-image-name:$(build.buildId)'
-
+  imageName: 'easypedconfapi:$(build.buildId)'
+  dockerid: 'easymedicine.azurecr.io'
+  appname: 'easypedconfapi'
 steps:
-- script: docker build -f Dockerfile -t $(imageName) .
+- task: NodeTool@0
+  inputs:
+    versionSpec: '8.x'
+- script: 
+    echo $(DB_HOST)
+- script: |
+    echo 'HOST=0.0.0.0' > .env
+    echo 'NODE_ENV=production' >> .env
+    echo 'APP_URL=http://${HOST}:${PORT}' >> .env
+    echo 'CACHE_VIEWS=false' >> .env
+    echo 'APP_KEY=$(APP_KEY)' >> .env
+    echo 'DB_CONNECTION=mysql' >> .env
+    echo 'DB_HOST=$(DB_HOST)' >> .env
+    echo 'DB_PORT=$(DB_PORT)' >> .env
+    echo 'DB_USER=$(DB_USER)' >> .env
+    echo 'DB_PASSWORD=$(DB_PASSWORD)' >> .env
+    echo 'DB_DATABASE=$(DB_DATABASE)' >> .env
+    echo 'DB_SSL=true' >> .env
+    echo 'SESSION_DRIVER=cookie' >> .env
+    echo 'HASH_DRIVER=bcrypt' >> .env
+- script: |
+    npm install
+    docker build -f Dockerfile -t $(dockerId)/$(imageName) .
+    docker login $(dockerId)
+    docker tag $(appname) $(dockerId)/$(imageName)
+    docker push $(dockerId)/$(imageName)
   displayName: 'docker build'
