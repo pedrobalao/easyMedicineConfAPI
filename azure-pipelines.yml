@@ -38,6 +38,5 @@ steps:
     npm install
     docker build -f Dockerfile -t $(dockerId)/$(imageName) .
     docker login $(dockerId)
-    docker tag $(appname) $(dockerId)/$(imageName)
     docker push $(dockerId)/$(imageName)
   displayName: 'docker build'
