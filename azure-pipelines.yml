@@ -37,6 +37,6 @@ steps:
 - script: |
     npm install
     docker build -f Dockerfile -t $(dockerId)/$(imageName) .
-    docker login $(dockerId)
+    docker login $(dockerId) -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
     docker push $(dockerId)/$(imageName)
   displayName: 'docker build'
