@@ -51,11 +51,11 @@ class DiseaseController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    const {description, author, indication, followup, example, bibliography, observation, treatments} = request.post()  
+    const {description, author, indication, followup, example, bibliography, observation, treatments, treatment_description} = request.post()  
     debugger
     console.log(treatments)
     const trx = await Database.beginTransaction()
-    const result = await Disease.create({description, author, indication, followup, example, bibliography, observation}, trx)
+    const result = await Disease.create({description, author, indication, followup, example, bibliography, observation, treatment_description}, trx)
     if(treatments != null && treatments.length > 0){
       treatments.forEach( (element, index) => {
         element.disease_id = result.id
@@ -65,32 +65,7 @@ class DiseaseController {
       await Treatment.createMany(treatments, trx)
     }
     trx.commit()
-
-
-    // if(treatments != null){
-
-    //   await Promise.all(
-    //     treatments.map(treat => {
-    //       if (!treat.id) {
-    //         return Treatment.create(treat)
-    //       }
-    //       return Treatment.query()
-    //         .where('id', treat.id)
-    //         .first()
-    //         .then(existingTreatment => {
-    //           delete treat.id
-    //           if (existingTreatment) {
-    //             existingTreatment.merge(treat)
-    //             return existingTreatment.save()
-    //           } else {
-    //             return Treatment.create(treat)
-    //           }
-    //         })
-    //     })
-    //   )
-    //   await result.treatments().saveMany(treatments)
-      
-
+    
     response.json({
       message: 'Successufully created a new '+resourceName,
       disease: result
@@ -125,11 +100,11 @@ class DiseaseController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
-    const {description, author, indication, followup, example, bibliography, observation, treatments} = request.post()  
+    const {description, author, indication, followup, example, bibliography, observation, treatments, treatment_description} = request.post()  
     let id = request.params.id
 
     const trx = await Database.beginTransaction()
-    let affectedRows = await Disease.query().where('id', id).update({ description, author, indication, followup, example, bibliography, observation}, trx)
+    let affectedRows = await Disease.query().where('id', id).update({ description, author, indication, followup, example, bibliography, observation, treatment_description}, trx)
 
     // delete all treatments and insert the new list
     

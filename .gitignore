@@ -9,6 +9,7 @@ tmp
 .env
 .env_local
 .env_azure
+mypassword.txt
 
 # The development sqlite file
 database/development.sqlite
