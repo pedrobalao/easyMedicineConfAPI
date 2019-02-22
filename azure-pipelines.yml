@@ -21,6 +21,7 @@ steps:
     echo $(DB_HOST)
 - script: |
     echo 'HOST=0.0.0.0' > .env
+    echo 'PORT=3333' >> .env
     echo 'NODE_ENV=production' >> .env
     echo 'APP_URL=http://${HOST}:${PORT}' >> .env
     echo 'CACHE_VIEWS=false' >> .env
