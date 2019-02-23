@@ -10,7 +10,7 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  imageName: 'easypedconfapi:$(build.buildId)'
+  imageName: 'easypedconfapi'
   dockerid: 'easymedicine.azurecr.io'
   appname: 'easypedconfapi'
 steps:
