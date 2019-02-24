@@ -20,7 +20,7 @@ class AuthController {
 
         const user = await User.create({username, email, password}) // user.save()
         let accessToken = await auth.generate(user)
-        return response.json({"user": user, "access_token": 'accessToken'})
+        return response.json({"user": user, "access_token": accessToken})
         // let ret = await auth.attempt(username, password)
         // return response.json(ret)
         

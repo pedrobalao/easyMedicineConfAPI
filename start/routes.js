@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /*
 |--------------------------------------------------------------------------
@@ -14,26 +14,23 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route')
-
+const Route = use("Route");
 
 //Route.on('/').render('welcome')
 Route.group(() => {
-Route.post('/auth/register', 'AuthController.register'),
-Route.post('/auth/login', 'AuthController.login'),
-Route.get('/auth/user', 'AuthController.user').middleware('auth'),
-Route.post('/auth/logout', 'AuthController.logout').middleware('auth'),
-
-Route.resource('diseases', 'DiseaseController').middleware('auth'),
-Route.resource('vias', 'ViaController').middleware('auth'),
-Route.resource('diseases.treatments', 'TreatmentController').middleware('auth'),
-Route.resource('treatments', 'TreatmentController').middleware('auth'),
-// Route.resource('drugs', 'DrugController').middleware('auth')
-Route.get('drugs', 'DrugController.index').middleware('auth'),
-Route.get('drugs/search', 'DrugController.search').middleware('auth'),
-Route.get('drugs/:id', 'DrugController.show').middleware('auth')
-
-}).prefix('api/v1');
-
-
-
+  Route.post("/auth/register", "AuthController.register"),
+    Route.post("/auth/login", "AuthController.login"),
+    Route.get("/auth/user", "AuthController.user").middleware("auth"),
+    Route.post("/auth/logout", "AuthController.logout").middleware("auth"),
+    Route.resource("diseases", "DiseaseController").middleware("auth"),
+    Route.resource("vias", "ViaController").middleware("auth"),
+    Route.resource("unities", "UnityController").middleware("auth"),
+    Route.resource("diseases.treatments", "TreatmentController").middleware(
+      "auth"
+    ),
+    Route.resource("treatments", "TreatmentController").middleware("auth"),
+    // Route.resource('drugs', 'DrugController').middleware('auth')
+    Route.get("drugs", "DrugController.index").middleware("auth"),
+    Route.get("drugs/search", "DrugController.search").middleware("auth"),
+    Route.get("drugs/:id", "DrugController.show").middleware("auth");
+}).prefix("api/v1");
