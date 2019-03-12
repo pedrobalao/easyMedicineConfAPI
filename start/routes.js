@@ -28,7 +28,9 @@ Route.group(() => {
     Route.resource("diseases.treatments", "TreatmentController").middleware(
       "auth"
     ),
+    Route.resource("medicalcalculations", "MedicalCalculationController").middleware("auth"),
     Route.resource("treatments", "TreatmentController").middleware("auth"),
+    Route.resource("variables", "VariableController").middleware("auth"),
     // Route.resource('drugs', 'DrugController').middleware('auth')
     Route.get("drugs", "DrugController.index").middleware("auth"),
     Route.get("drugs/search", "DrugController.search").middleware("auth"),
