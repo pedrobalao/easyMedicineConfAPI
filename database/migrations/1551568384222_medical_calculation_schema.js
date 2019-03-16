@@ -20,7 +20,7 @@ class MedicalCalculationSchema extends Schema {
           table.timestamps()
         });
 
-        Id, Description, ResultUnitId, Formula, Observation, CalculationGroupId, ResultType, Precision
+        
       }
       else {
         return that.table('medicalcalculation', (table) => {

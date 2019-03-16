@@ -31,8 +31,13 @@ Route.group(() => {
     Route.resource("medicalcalculations", "MedicalCalculationController").middleware("auth"),
     Route.resource("treatments", "TreatmentController").middleware("auth"),
     Route.resource("variables", "VariableController").middleware("auth"),
-    // Route.resource('drugs', 'DrugController').middleware('auth')
+    Route.resource('categories', 'DrugCategoryController').middleware('auth'),
+    Route.resource("categories.subcategories", "DrugSubCategoryController").middleware(
+      "auth"
+    ),
     Route.get("drugs", "DrugController.index").middleware("auth"),
     Route.get("drugs/search", "DrugController.search").middleware("auth"),
     Route.get("drugs/:id", "DrugController.show").middleware("auth");
+
+
 }).prefix("api/v1");
