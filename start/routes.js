@@ -35,6 +35,9 @@ Route.group(() => {
     Route.resource("categories.subcategories", "DrugSubCategoryController").middleware(
       "auth"
     ),
+    Route.resource("categories.subcategories.drugs", "DrugController").middleware(
+      "auth"
+    ),
     Route.get("drugs", "DrugController.index").middleware("auth"),
     Route.get("drugs/search", "DrugController.search").middleware("auth"),
     Route.get("drugs/:id", "DrugController.show").middleware("auth");
