@@ -89,7 +89,7 @@ class DrugController {
    */
   async show({ params, request, response, view }) {
     let id = request.params.id;
-    let drug = await Drug.find(id);
+    let drug = await Drug.query().where('Id', id).with('indications.doses').first();
 
     response.json({
       drug

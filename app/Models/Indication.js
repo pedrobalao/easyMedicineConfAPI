@@ -3,16 +3,16 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 
-class Drug extends Model {
+class Indication extends Model {
     static get table() {
-        return 'drug'
+        return 'indication'
     }
     static get primaryKey() {
         return 'Id'
     }
-    indications () {
-        return this.hasMany('App/Models/Indication', 'Id', 'DrugId')
+    doses () {
+        return this.hasMany('App/Models/Dose', 'Id', 'IndicationId')
     }
 }
 
-module.exports = Drug
+module.exports = Indication
