@@ -61,7 +61,7 @@ class MedicalCalculationController {
     trx.commit()
     response.json({
       message: 'Successufully created a new '+resourceName,
-      variable: result
+      medicalcalculation: result
     })
   }
 

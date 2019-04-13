@@ -16,6 +16,9 @@ class Variable extends Model {
     values () {
         return this.hasMany('App/Models/VariableValue', 'Id', 'VariableId')
     }
+    drugs () {
+        return this.belongsToMany('App/Models/Drug', 'VariableId', 'DrugId',  'Id', 'Id').pivotTable('variabledrug')
+    }
 }
 
 module.exports = Variable

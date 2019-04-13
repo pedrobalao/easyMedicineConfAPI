@@ -41,6 +41,7 @@ Route.group(() => {
     Route.get("drugs", "DrugController.index").middleware("auth"),
     Route.get("drugs/search", "DrugController.search").middleware("auth"),
     Route.get("drugs/:id", "DrugController.show").middleware("auth");
-
+    Route.post("drugs", "DrugController.store").middleware("auth");
+    Route.put("drugs/:id", "DrugController.update").middleware("auth");
 
 }).prefix("api/v1");
