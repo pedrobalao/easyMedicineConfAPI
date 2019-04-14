@@ -190,17 +190,7 @@ class DrugController {
   async update({ params, request, response }) {
     console.log("update");
     let drugid = request.params.id;
-    if (
-      request.params.categories_id != null &&
-      request.params.subcategories_id != null
-    ) {
-      let subcategory = await SubCategory.query()
-        .where("Id", request.params.subcategories_id)
-        .andWhere("CategoryId", request.params.categories_id)
-        .first();
 
-      await subcategory.drugs().attach([drugid]);
-    } else {
       // update drugs
       const {
         Name,
@@ -271,7 +261,48 @@ class DrugController {
       response.json({
         message: "Successufully updated " + affectedRows
       });
-    }
+    
+  }  
+
+  /**
+   * associate a drug with a category.
+   * POST drugs/associate?drugid=:id
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
+  async associate({ params, request, response }) {
+    
+    let drugid = request.params.id;
+    let catid = request.params.categories_id
+    let subcatid = request.params.subcategories_id
+    let subcategory = await SubCategory.query()
+      .where("Id", subcatid)
+      .andWhere("CategoryId", catid)
+      .first();
+
+    await subcategory.drugs().attach([drugid]);
+  }
+
+/**
+   * Delete a drug with id.
+   * DELETE drugs/:id
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
+  async diassociate({ params, request, response }) {
+    let drugid = request.params.id;
+    let catid = request.params.categories_id
+    let subcatid = request.params.subcategories_id
+    let subcategory = await SubCategory.query()
+      .where("Id", subcatid)
+      .andWhere("CategoryId", catid)
+      .first();
+
+    await subcategory.drugs().detach([drugid]);
   }
 
   /**

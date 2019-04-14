@@ -40,8 +40,11 @@ Route.group(() => {
     ),
     Route.get("drugs", "DrugController.index").middleware("auth"),
     Route.get("drugs/search", "DrugController.search").middleware("auth"),
-    Route.get("drugs/:id", "DrugController.show").middleware("auth");
-    Route.post("drugs", "DrugController.store").middleware("auth");
-    Route.put("drugs/:id", "DrugController.update").middleware("auth");
+    Route.get("drugs/:id", "DrugController.show").middleware("auth"),
+    Route.post("drugs", "DrugController.store").middleware("auth"),
+    Route.put("drugs/:id", "DrugController.update").middleware("auth"),
+    Route.post("categories/:categories_id/subcategories/:subcategories_id/drugs/:id/associate", "DrugController.associate").middleware("auth"),
+    Route.delete("categories/:categories_id/subcategories/:subcategories_id/drugs/:id/diassociate", "DrugController.diassociate").middleware("auth")
+    ;
 
 }).prefix("api/v1");
