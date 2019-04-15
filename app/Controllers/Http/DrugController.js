@@ -126,6 +126,7 @@ class DrugController {
       }
 
       if (variables != null && variables.length > 0) {
+        let variableIds = []
         variables.forEach(element => {
           variableIds.push(element.Id);
         });
