@@ -37,6 +37,7 @@ class AuthController {
           }
         }
         catch (e) {
+          console.log("error - "+e)
           return response.status(401).json({message: 'Invalid username password'})
         }
     }
