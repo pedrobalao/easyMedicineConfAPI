@@ -57,7 +57,8 @@ class DiseaseController {
       treatments,
       treatment_description,
       status,
-      treatment
+      treatment,
+      general_measures
     } = request.post();
     debugger;
     console.log(treatments);
@@ -79,7 +80,8 @@ class DiseaseController {
         observation: observation,
         treatment_description: treatment_description,
         status: status,
-        treatment: treatmentjson
+        treatment: treatmentjson,
+        general_measures: general_measures
       },
       trx
     );
@@ -138,7 +140,8 @@ class DiseaseController {
         treatments,
         treatment_description,
         status,
-        treatment
+        treatment,
+        general_measures
       } = request.post();
       let id = request.params.id;
 
@@ -160,7 +163,8 @@ class DiseaseController {
             observation: observation,
             treatment_description: treatment_description,
             status: status,
-            treatment: treatmentjson
+            treatment: treatmentjson,
+            general_measures: general_measures
           },
           trx
         );
