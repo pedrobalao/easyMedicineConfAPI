@@ -46,59 +46,65 @@ class DiseaseController {
    * @param {Response} ctx.response
    */
   async store({ request, response }) {
-    const {
-      description,
-      author,
-      indication,
-      followup,
-      example,
-      bibliography,
-      observation,
-      treatments,
-      treatment_description,
-      status,
-      treatment,
-      general_measures
-    } = request.post();
-    debugger;
-    console.log(treatments);
-
-    if (status == null) {
-      status = "draft";
-    }
-    const trx = await Database.beginTransaction();
-
-    const treatmentjson = JSON.stringify(treatment);
-    const result = await Disease.create(
-      {
-        description: description,
-        author: author,
-        indication: indication,
-        followup: followup,
-        example: example,
-        bibliography: bibliography,
-        observation: observation,
-        treatment_description: treatment_description,
-        status: status,
-        treatment: treatmentjson,
-        general_measures: general_measures
-      },
-      trx
-    );
-    if (treatments != null && treatments.length > 0) {
-      treatments.forEach((element, index) => {
-        element.disease_id = result.id;
-        element.order = index;
-      });
+    try {
+      const {
+        description,
+        author,
+        indication,
+        followup,
+        example,
+        bibliography,
+        observation,
+        treatments,
+        treatment_description,
+        status,
+        treatment,
+        general_measures
+      } = request.post();
+      debugger;
       console.log(treatments);
-      await Treatment.createMany(treatments, trx);
-    }
-    trx.commit();
 
-    response.json({
-      message: "Successufully created a new " + resourceName,
-      disease: result
-    });
+      let fstatus = status;
+      if (fstatus == null) {
+        fstatus = "draft";
+      }
+      const trx = await Database.beginTransaction();
+
+      const treatmentjson = JSON.stringify(treatment);
+      const result = await Disease.create(
+        {
+          description: description,
+          author: author,
+          indication: indication,
+          followup: followup,
+          example: example,
+          bibliography: bibliography,
+          observation: observation,
+          treatment_description: treatment_description,
+          status: fstatus,
+          treatment: treatmentjson,
+          general_measures: general_measures
+        },
+        trx
+      );
+      if (treatments != null && treatments.length > 0) {
+        treatments.forEach((element, index) => {
+          element.disease_id = result.id;
+          element.order = index;
+        });
+        console.log(treatments);
+        await Treatment.createMany(treatments, trx);
+      }
+      trx.commit();
+
+      response.json({
+        message: "Successufully created a new " + resourceName,
+        disease: result
+      });
+    } catch (error) {
+      console.log("error - " + error);
+      return response.status(500).json({ message: error });
+    }
   }
 
   /**
@@ -146,9 +152,12 @@ class DiseaseController {
       let id = request.params.id;
 
       const treatmentjson = JSON.stringify(treatment);
-      if (status == null) {
-        status = "draft";
+
+      let fstatus = status;
+      if (fstatus == null) {
+        fstatus = "draft";
       }
+      
       const trx = await Database.beginTransaction();
       let affectedRows = await Disease.query()
         .where("id", id)
@@ -162,7 +171,7 @@ class DiseaseController {
             bibliography: bibliography,
             observation: observation,
             treatment_description: treatment_description,
-            status: status,
+            status: fstatus,
             treatment: treatmentjson,
             general_measures: general_measures
           },
